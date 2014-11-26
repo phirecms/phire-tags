@@ -1,4 +1,4 @@
-phire-module-tags
+Phire Tags Module
 =================
 
 Tag module for Phire CMS 2
