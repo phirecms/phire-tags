@@ -55,13 +55,14 @@ class Tag extends AbstractModel
      * Get tag from slug
      *
      * @param  string  $slug
+     * @param  boolean $fields
      * @return void
      */
-    public function getBySlug($slug)
+    public function getBySlug($slug, $fields = false)
     {
         $tag = Table\Tags::findBy(['slug' => $slug]);
         if (isset($tag->id)) {
-            $this->data = array_merge($this->data, $tag->getColumns());
+            $this->getTagContent($tag, $fields);
         }
     }
 
@@ -137,6 +138,53 @@ class Tag extends AbstractModel
     public function getCount()
     {
         return Table\Tags::findAll()->count();
+    }
+
+    /**
+     * Get tag content
+     *
+     * @param  Table\Tags $tag
+     * @param  boolean    $fields
+     * @return void
+     */
+    protected function getTagContent(Table\Tags $tag, $fields = false)
+    {
+        if ($fields) {
+            $t    = \Phire\Fields\Model\FieldValue::getModelObject('Phire\Tags\Model\Tag', [$tag->id]);
+            $data = $t->toArray();
+        } else {
+            $data = $tag->getColumns();
+        }
+
+        $items = [];
+        $c2t   = Table\ContentToTags::findBy(['tag_id' => $tag->id]);
+        if ($c2t->hasRows()) {
+            foreach ($c2t->rows() as $c) {
+                if ($fields) {
+                    $filters = ['strip_tags' => null];
+                    if ($this->summary_length > 0) {
+                        $filters['substr'] = [0, $this->summary_length];
+                    };
+                    $item = \Phire\Fields\Model\FieldValue::getModelObject(
+                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
+                    );
+                } else {
+                    $class = 'Phire\Content\Model\Content';
+                    $model = new $class();
+                    call_user_func_array([
+                            $model, 'getById'], [$c->content_id]
+                    );
+                    $item = $model;
+                }
+
+                if (($item->status == 1) && ($item->roles != 'a:0:{}')) {
+                    $items[$item->id] = new \ArrayObject($item->toArray(), \ArrayObject::ARRAY_AS_PROPS);
+                }
+            }
+        }
+
+        $data['items'] = $items;
+        $this->data = array_merge($this->data, $data);
     }
 
 }

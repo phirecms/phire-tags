@@ -34,6 +34,31 @@ return [
                 'action'   => 'Phire\Tags\Event\Tag::bootstrap',
                 'priority' => 1000
             ],
+            [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Tags\Event\Tag::setTemplate',
+                'priority' => 1000
+            ],
+            [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Tags\Event\Tag::getAll',
+                'priority' => 1000
+            ],
+            [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Tags\Event\Tag::save',
+                'priority' => 1000
+            ],
+            [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Tags\Event\Tag::delete',
+                'priority' => 1000
+            ],
+            [
+                'name'     => 'app.send.pre',
+                'action'   => 'Phire\Tags\Event\Tag::tagCloud',
+                'priority' => 1000
+            ]
         ],
         'summary_length'  => 150,
         'show_total'      => true

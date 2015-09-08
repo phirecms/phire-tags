@@ -55,3 +55,11 @@
     background-position: left center;
     background-repeat: no-repeat;
 }
+
+input[type=text].tags-field {
+    margin: 0 5px 0 0;
+    padding: 3px 5px 3px 5px;
+    font-size: 0.825em;
+    width: 185px;
+}
+

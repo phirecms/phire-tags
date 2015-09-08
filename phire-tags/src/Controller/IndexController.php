@@ -27,16 +27,30 @@ class IndexController extends AbstractController
 
         if ($slug != '') {
             $tag = new Model\Tag();
-            $tag->getBySlug($slug);
+            $tag->getBySlug($slug, $this->application->isRegistered('phire-fields'));
 
             if (isset($tag->id)) {
+                if (count($tag->items) > $this->config->pagination) {
+                    $page  = $this->request->getQuery('page');
+                    $limit = $this->config->pagination;
+                    $pages = new Paginator(count($tag->items), $limit);
+                    $pages->useInput(true);
+                    $offset = ((null !== $page) && ((int)$page > 1)) ?
+                        ($page * $limit) - $limit : 0;
+                    $tag->items = array_slice($tag->items, $offset, $limit, true);
+                } else {
+                    $pages = null;
+                }
+
                 $this->prepareView('tags-public/tag.phtml');
-                $this->template = 'tag.phtml';
+                $this->template        = 'tag.phtml';
                 $this->view->title     = 'Tag : ' . $tag->title;
                 $this->view->tag_id    = $tag->id;
                 $this->view->tag_title = $tag->title;
                 $this->view->tag_slug  = $tag->slug;
 
+                $this->view->pages     = $pages;
+                $this->view->merge($tag->toArray());
                 $this->send();
             } else {
                 $this->error();
