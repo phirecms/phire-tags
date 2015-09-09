@@ -46,7 +46,15 @@ class Tag
     {
         if ($application->isRegistered('phire-templates') && ($controller instanceof \Phire\Content\Controller\IndexController) &&
             ($controller->hasView()) && $controller->view()->isStream()) {
-            $template = \Phire\Templates\Table\Templates::findBy(['name' => 'Tag']);
+            if (null !== $controller->view()->tag_title) {
+                $template = \Phire\Templates\Table\Templates::findBy(['name' => 'Tag ' . $controller->view()->tag_title]);
+                if (!isset($template->id)) {
+                    $template = \Phire\Templates\Table\Templates::findBy(['name' => 'Tag']);
+                }
+            } else {
+                $template = \Phire\Templates\Table\Templates::findBy(['name' => 'Tag']);
+            }
+
             if (isset($template->id)) {
                 if (isset($template->id)) {
                     $device = \Phire\Templates\Event\Template::getDevice($controller->request()->getQuery('mobile'));
@@ -67,9 +75,21 @@ class Tag
             ($controller->hasView()) && $controller->view()->isFile()) {
             $theme = \Phire\Themes\Table\Themes::findBy(['active' => 1]);
             if (isset($theme->id)) {
+                $template  = null;
                 $themePath = $_SERVER['DOCUMENT_ROOT'] . BASE_PATH . CONTENT_PATH . '/themes/' . $theme->folder . '/';
-                if (file_exists($themePath . 'tag.phtml') || file_exists($themePath . 'tag.php')) {
+
+                if (null !== $controller->view()->tag_slug) {
+                    $tagSlug = 'tag-' . str_replace('/', '-', $controller->view()->tag_slug);
+                    if (file_exists($themePath . $tagSlug . '.phtml') || file_exists($themePath . $tagSlug . '.php')) {
+                        $template = file_exists($themePath . $tagSlug . '.phtml') ? $tagSlug . '.phtml' : $tagSlug . '.php';
+                    } else if (file_exists($themePath . 'tag.phtml') || file_exists($themePath . 'tag.php')) {
+                        $template = file_exists($themePath . 'tag.phtml') ? 'tag.phtml' : 'tag.php';
+                    }
+                } else if (file_exists($themePath . 'tag.phtml') || file_exists($themePath . 'tag.php')) {
                     $template = file_exists($themePath . 'tag.phtml') ? 'tag.phtml' : 'tag.php';
+                }
+
+                if (null !== $template) {
                     $device = \Phire\Themes\Event\Theme::getDevice($controller->request()->getQuery('mobile'));
                     if ((null !== $device) && (file_exists($themePath . $device . '/' . $template))) {
                         $template = $device . '/' . $template;
@@ -124,7 +144,7 @@ class Tag
     }
 
     /**
-     * Get all category values for the form object
+     * Get all tag values for the form object
      *
      * @param  AbstractController $controller
      * @param  Application        $application
@@ -201,7 +221,7 @@ class Tag
     }
 
     /**
-     * Delete category relationships
+     * Delete tag relationships
      *
      * @param  AbstractController $controller
      * @param  Application        $application
