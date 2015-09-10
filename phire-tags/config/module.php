@@ -56,7 +56,7 @@ return [
             ],
             [
                 'name'     => 'app.send.pre',
-                'action'   => 'Phire\Tags\Event\Tag::tagCloud',
+                'action'   => 'Phire\Tags\Event\Tag::init',
                 'priority' => 1000
             ]
         ],

@@ -62,8 +62,55 @@ class Tag extends AbstractModel
     {
         $tag = Table\Tags::findBy(['slug' => $slug]);
         if (isset($tag->id)) {
-            $this->getTagContent($tag, $fields);
+            $this->getTag($tag, $fields);
         }
+    }
+
+    /**
+     * Get tag content
+     *
+     * @param  mixed   $id
+     * @param  boolean $fields
+     * @return array
+     */
+    public function getTagContent($id, $fields = false)
+    {
+        if (!is_numeric($id)) {
+            $tag = Table\Tags::findBy(['title' => $id]);
+            if (isset($tag->id)) {
+                $id = $tag->id;
+            }
+        }
+
+        $items   = [];
+
+        $c2t = Table\ContentToTags::findBy(['tag_id' => $id]);
+        if ($c2t->hasRows()) {
+            foreach ($c2t->rows() as $c) {
+                if ($fields) {
+                    $filters = ['strip_tags' => null];
+                    if ($this->summary_length > 0) {
+                        $filters['substr'] = [0, $this->summary_length];
+                    };
+                    $item = \Phire\Fields\Model\FieldValue::getModelObject(
+                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
+                    );
+                } else {
+                    $class = 'Phire\Content\Model\Content';
+                    $model = new $class();
+                    call_user_func_array([
+                        $model, 'getById'], [$c->content_id]
+                    );
+                    $item = $model;
+                }
+
+                if (($item->status == 1) && (count($item->roles) == 0)) {
+                    $items[$item->id] = new \ArrayObject($item->toArray(), \ArrayObject::ARRAY_AS_PROPS);
+                }
+            }
+        }
+
+        return $items;
     }
 
     /**
@@ -147,7 +194,7 @@ class Tag extends AbstractModel
      * @param  boolean    $fields
      * @return void
      */
-    protected function getTagContent(Table\Tags $tag, $fields = false)
+    protected function getTag(Table\Tags $tag, $fields = false)
     {
         if ($fields) {
             $t    = \Phire\Fields\Model\FieldValue::getModelObject('Phire\Tags\Model\Tag', [$tag->id]);
@@ -172,12 +219,12 @@ class Tag extends AbstractModel
                     $class = 'Phire\Content\Model\Content';
                     $model = new $class();
                     call_user_func_array([
-                            $model, 'getById'], [$c->content_id]
+                        $model, 'getById'], [$c->content_id]
                     );
                     $item = $model;
                 }
 
-                if (($item->status == 1) && ($item->roles != 'a:0:{}')) {
+                if (($item->status == 1) && (count($item->roles) == 0)) {
                     $items[$item->id] = new \ArrayObject($item->toArray(), \ArrayObject::ARRAY_AS_PROPS);
                 }
             }

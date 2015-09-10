@@ -101,13 +101,13 @@ class Tag
     }
 
     /**
-     * Create tag cloud
+     * Init tag model and tag cloud
      *
      * @param  AbstractController $controller
      * @param  Application        $application
      * @return void
      */
-    public static function tagCloud(AbstractController $controller, Application $application)
+    public static function init(AbstractController $controller, Application $application)
     {
         if ((!$_POST) && ($controller->hasView()) && ($controller instanceof \Phire\Content\Controller\IndexController)) {
             $sql = Table\ContentToTags::sql();
@@ -139,7 +139,11 @@ class Tag
                 }
             }
 
-            $controller->view()->tag_cloud = $cloud;
+            $tag = new Model\Tag();
+            $tag->summary_length = $application->module('phire-tags')['summary_length'];
+
+            $controller->view()->tag_cloud  = $cloud;
+            $controller->view()->phire->tag = $tag;
         }
     }
 
