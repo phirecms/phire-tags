@@ -204,7 +204,7 @@ class Tag extends AbstractModel
         }
 
         $items = [];
-        $c2t   = Table\ContentToTags::findBy(['tag_id' => $tag->id]);
+        $c2t   = Table\ContentToTags::findBy(['tag_id' => $tag->id], ['order' => 'content_id DESC']);
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
                 if ($fields) {
