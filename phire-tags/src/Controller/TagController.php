@@ -61,7 +61,7 @@ class TagController extends AbstractController
                 $tag = new Model\Tag();
                 $tag->save($this->view->form->getFields());
                 $this->view->id = $tag->id;
-                $this->sess->setRequestValue('saved', true, 1);
+                $this->sess->setRequestValue('saved', true);
                 $this->redirect(BASE_PATH . APP_URI . '/tags/edit/'. $tag->id);
             }
         }
@@ -106,7 +106,7 @@ class TagController extends AbstractController
 
                 $tag->update($this->view->form->getFields());
                 $this->view->id = $tag->id;
-                $this->sess->setRequestValue('saved', true, 1);
+                $this->sess->setRequestValue('saved', true);
                 $this->redirect(BASE_PATH . APP_URI . '/tags/edit/'. $tag->id);
             }
         }
@@ -125,7 +125,7 @@ class TagController extends AbstractController
             $tag = new Model\Tag();
             $tag->remove($this->request->getPost());
         }
-        $this->sess->setRequestValue('removed', true, 1);
+        $this->sess->setRequestValue('removed', true);
         $this->redirect(BASE_PATH . APP_URI . '/tags');
     }
 
