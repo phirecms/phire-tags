@@ -27,7 +27,7 @@ class IndexController extends AbstractController
 
         if ($slug != '') {
             $tag = new Model\Tag();
-            $tag->getBySlug($slug, $this->application->isRegistered('phire-fields'));
+            $tag->getBySlug($slug, $this->application->modules());
 
             if (isset($tag->id)) {
                 if (count($tag->items) > $this->config->pagination) {
