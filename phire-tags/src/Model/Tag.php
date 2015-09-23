@@ -55,14 +55,14 @@ class Tag extends AbstractModel
      * Get tag from slug
      *
      * @param  string  $slug
-     * @param  boolean $fields
+     * @param  \Pop\Module\Manager $modules
      * @return void
      */
-    public function getBySlug($slug, $fields = false)
+    public function getBySlug($slug, \Pop\Module\Manager $modules)
     {
         $tag = Table\Tags::findBy(['slug' => $slug]);
         if (isset($tag->id)) {
-            $this->getTag($tag, $fields);
+            $this->getTag($tag, $modules);
         }
     }
 
@@ -190,15 +190,18 @@ class Tag extends AbstractModel
     /**
      * Get tag content
      *
-     * @param  Table\Tags $tag
-     * @param  boolean    $fields
+     * @param  Table\Tags          $tag
+     * @param  \Pop\Module\Manager $modules
      * @return void
      */
-    protected function getTag(Table\Tags $tag, $fields = false)
+    protected function getTag(Table\Tags $tag, \Pop\Module\Manager $modules)
     {
-        if ($fields) {
+        if ($modules->isRegistered('phire-fields')) {
             $t    = \Phire\Fields\Model\FieldValue::getModelObject('Phire\Tags\Model\Tag', [$tag->id]);
             $data = $t->toArray();
+        } else if ($modules->isRegistered('phire-fields-plus')) {
+            $t    = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Tags\\Model\\Tag', $tag->id);
+            $data = (array)$t;
         } else {
             $data = $tag->getColumns();
         }
@@ -207,7 +210,7 @@ class Tag extends AbstractModel
         $c2t   = Table\ContentToTags::findBy(['tag_id' => $tag->id], ['order' => 'content_id DESC']);
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
-                if ($fields) {
+                if ($modules->isRegistered('phire-fields')) {
                     $filters = ['strip_tags' => null];
                     if ($this->summary_length > 0) {
                         $filters['substr'] = [0, $this->summary_length];
@@ -215,6 +218,8 @@ class Tag extends AbstractModel
                     $item = \Phire\Fields\Model\FieldValue::getModelObject(
                         'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
                     );
+                } else if ($modules->isRegistered('phire-fields-plus')) {
+                    $item = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Content\\Model\\Content', $c->content_id);
                 } else {
                     $class = 'Phire\Content\Model\Content';
                     $model = new $class();
