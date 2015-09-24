@@ -219,7 +219,11 @@ class Tag extends AbstractModel
                         'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
                     );
                 } else if ($modules->isRegistered('phire-fields-plus')) {
-                    $item = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Content\\Model\\Content', $c->content_id);
+                    $filters = ['strip_tags' => null];
+                    if ($this->summary_length > 0) {
+                        $filters['substr'] = [0, $this->summary_length];
+                    };
+                    $item = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Content\\Model\\Content', $c->content_id, $filters);
                 } else {
                     $class = 'Phire\Content\Model\Content';
                     $model = new $class();
