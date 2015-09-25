@@ -201,7 +201,7 @@ class Tag extends AbstractModel
             $data = $t->toArray();
         } else if ($modules->isRegistered('phire-fields-plus')) {
             $t    = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Tags\\Model\\Tag', $tag->id);
-            $data = (array)$t;
+            $data = $t->toArray();
         } else {
             $data = $tag->getColumns();
         }
@@ -223,7 +223,10 @@ class Tag extends AbstractModel
                     if ($this->summary_length > 0) {
                         $filters['substr'] = [0, $this->summary_length];
                     };
-                    $item = \Phire\FieldsPlus\Model\FieldValue::getModelObject(DB_PREFIX . 'tags', 'Phire\\Content\\Model\\Content', $c->content_id, $filters);
+                    $item = \Phire\FieldsPlus\Model\FieldValue::getModelObject(
+                        DB_PREFIX . 'content', 'Phire\\Content\\Model\\Content', $c->content_id, $filters
+                    );
+                    $item->roles = unserialize($item->roles);
                 } else {
                     $class = 'Phire\Content\Model\Content';
                     $model = new $class();
