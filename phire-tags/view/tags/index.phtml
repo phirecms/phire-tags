@@ -13,6 +13,7 @@
             <tr>
                 <th><a href="<?=$phireUri . '/tags?sort=id';?>">#</a></th>
                 <th><a href="<?=$phireUri . '/tags?sort=title';?>">Title</a></th>
+                <th><a href="<?=$phireUri . '/tags?sort=count';?>">Count</a></th>
                 <th class="text-center"><?php if ($acl->isAllowed($user->role, 'tags', 'edit')): ?>Edit<?php else: ?>&nbsp;<?php endif; ?></th>
                 <th class="text-center"><?php if ($acl->isAllowed($user->role, 'tags', 'remove')): ?><input type="checkbox" name="checkall" id="checkall" value="rm_tags" /><?php else: ?>&nbsp;<?php endif; ?></th>
             </tr>
@@ -21,6 +22,7 @@
             <tr>
                 <td><?=$tag->id; ?></td>
                 <td><?=$tag->title; ?></td>
+                <td><?=$tag->count; ?></td>
                 <td><?php if ($acl->isAllowed($user->role, 'tags', 'edit')): ?><a class="edit-link" href="<?=$phireUri . '/tags/edit/' . $tag->id; ?>">Edit</a><?php else: ?>&nbsp;<?php endif; ?></td>
                 <td class="text-center"><?php if ($acl->isAllowed($user->role, 'tags', 'remove')): ?><input type="checkbox" name="rm_tags[]" id="rm_tags<?=$i++; ?>" value="<?=$tag->id; ?>" /><?php else: ?>&nbsp;<?php endif; ?></td>
             </tr>

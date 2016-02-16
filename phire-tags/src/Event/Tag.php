@@ -135,7 +135,7 @@ class Tag
                     } else {
                         $weight = $weight - ($weight % 10);
                     }
-                    $cloud  .= '<a class="tag-link tag-weight-' . $weight . '" href="' . BASE_PATH . '/tag/' . $tag->slug . '">' . $tag->title . '</a>';
+                    $cloud  .= '<a class="tag-link tag-weight-' . $weight . '" href="' . BASE_PATH . '/tag/' . $tag->slug . '">' . $tag->title . '</a>' . PHP_EOL;
                 }
             }
 

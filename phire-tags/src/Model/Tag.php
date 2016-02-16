@@ -21,19 +21,30 @@ class Tag extends AbstractModel
     {
         $order = $this->getSortOrder($sort, $page);
 
+        $sql = Table\ContentToTags::sql();
+        $sql->select([
+            0       => 'tag_id',
+            1       => 'id',
+            2       => 'title',
+            3       => 'slug',
+            'count' => 'COUNT(1)'
+        ])->join(DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'content_to_tags.tag_id']);
+
+        $sql->select()->groupBy('tag_id');
+
+        $orderAry = explode(' ', $order);
+        $sql->select()->orderBy($orderAry[0], $orderAry[1]);
+
         if (null !== $limit) {
             $page = ((null !== $page) && ((int)$page > 1)) ?
                 ($page * $limit) - $limit : null;
 
-            return Table\Tags::findAll([
-                'offset' => $page,
-                'limit'  => $limit,
-                'order'  => $order
-            ])->rows();
+            $sql->select()->offset($page);
+            $sql->select()->limit($limit);
+
+            return Table\ContentToTags::query($sql)->rows();
         } else {
-            return Table\Tags::findAll([
-                'order'  => $order
-            ])->rows();
+            return Table\ContentToTags::query($sql)->rows();
         }
     }
 

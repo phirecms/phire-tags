@@ -6,6 +6,7 @@ use Phire\Tags\Model;
 use Phire\Tags\Form;
 use Phire\Tags\Table;
 use Phire\Controller\AbstractController;
+use Pop\Paginator\Paginator;
 
 class TagController extends AbstractController
 {
