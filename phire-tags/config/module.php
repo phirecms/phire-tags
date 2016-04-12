@@ -60,7 +60,10 @@ return [
                 'priority' => 1000
             ]
         ],
-        'summary_length'  => 150,
+        'filters'          => [
+            'strip_tags' => null,
+            'substr'     => [0, 150]
+        ],
         'show_total'      => true
     ]
 ];

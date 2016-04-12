@@ -99,12 +99,8 @@ class Tag extends AbstractModel
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
                 if ($fields) {
-                    $filters = ['strip_tags' => null];
-                    if ($this->summary_length > 0) {
-                        $filters['substr'] = [0, $this->summary_length];
-                    };
                     $item = \Phire\Fields\Model\FieldValue::getModelObject(
-                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
+                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $this->filters
                     );
                 } else {
                     $class = 'Phire\Content\Model\Content';
@@ -219,12 +215,8 @@ class Tag extends AbstractModel
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
                 if ($modules->isRegistered('phire-fields')) {
-                    $filters = ['strip_tags' => null];
-                    if ($this->summary_length > 0) {
-                        $filters['substr'] = [0, $this->summary_length];
-                    };
                     $item = \Phire\Fields\Model\FieldValue::getModelObject(
-                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $filters
+                        'Phire\Content\Model\Content', [$c->content_id], 'getById', $modules['phire-tags']['filters']
                     );
                 } else {
                     $class = 'Phire\Content\Model\Content';

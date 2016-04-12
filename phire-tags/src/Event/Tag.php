@@ -140,7 +140,7 @@ class Tag
             }
 
             $tag = new Model\Tag();
-            $tag->summary_length = $application->module('phire-tags')['summary_length'];
+            $tag->filters = $application->module('phire-tags')['filters'];
 
             $controller->view()->tag_cloud  = $cloud;
             $controller->view()->phire->tag = $tag;
