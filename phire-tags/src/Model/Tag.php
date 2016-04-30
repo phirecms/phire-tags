@@ -21,14 +21,14 @@ class Tag extends AbstractModel
     {
         $order = $this->getSortOrder($sort, $page);
 
-        $sql = Table\ContentToTags::sql();
+        $sql = Table\TagItems::sql();
         $sql->select([
             0       => 'tag_id',
             1       => 'id',
             2       => 'title',
             3       => 'slug',
             'count' => 'COUNT(1)'
-        ])->join(DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'content_to_tags.tag_id']);
+        ])->join(DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'tag_items.tag_id']);
 
         $sql->select()->groupBy('tag_id');
 
@@ -42,9 +42,9 @@ class Tag extends AbstractModel
             $sql->select()->offset($page);
             $sql->select()->limit($limit);
 
-            return Table\ContentToTags::query($sql)->rows();
+            return Table\TagItems::query($sql)->rows();
         } else {
-            return Table\ContentToTags::query($sql)->rows();
+            return Table\TagItems::query($sql)->rows();
         }
     }
 
@@ -95,7 +95,7 @@ class Tag extends AbstractModel
 
         $items   = [];
 
-        $c2t = Table\ContentToTags::findBy(['tag_id' => $id]);
+        $c2t = Table\TagItems::findBy(['tag_id' => $id]);
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
                 if ($fields) {
@@ -211,7 +211,7 @@ class Tag extends AbstractModel
         }
 
         $items = [];
-        $c2t   = Table\ContentToTags::findBy(['tag_id' => $tag->id], ['order' => 'content_id DESC']);
+        $c2t   = Table\TagItems::findBy(['tag_id' => $tag->id], ['order' => 'content_id DESC']);
         if ($c2t->hasRows()) {
             foreach ($c2t->rows() as $c) {
                 if ($modules->isRegistered('phire-fields')) {

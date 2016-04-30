@@ -4,7 +4,7 @@ namespace Phire\Tags\Table;
 
 use Pop\Db\Record;
 
-class ContentToTags extends Record
+class TagItems extends Record
 {
 
     /**

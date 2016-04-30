@@ -110,18 +110,18 @@ class Tag
     public static function init(AbstractController $controller, Application $application)
     {
         if ((!$_POST) && ($controller->hasView()) && ($controller instanceof \Phire\Content\Controller\IndexController)) {
-            $sql = Table\ContentToTags::sql();
+            $sql = Table\TagItems::sql();
             $sql->select([
                 0       => 'tag_id',
                 1       => 'id',
                 2       => 'title',
                 3       => 'slug',
                 'count' => 'COUNT(1)'
-            ])->join(DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'content_to_tags.tag_id']);
+            ])->join(DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'tag_items.tag_id']);
 
             $sql->select()->groupBy('tag_id')->orderBy('count', 'DESC');
 
-            $tags  = Table\ContentToTags::query($sql);
+            $tags  = Table\TagItems::query($sql);
             $cloud = null;
             $max   = 0;
             if ($tags->hasRows()) {
@@ -163,12 +163,12 @@ class Tag
             $tags       = [];
 
             if (null !== $contentId) {
-                $sql = Table\ContentToTags::sql();
+                $sql = Table\TagItems::sql();
                 $sql->select()->join(
-                    DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'content_to_tags.tag_id']
+                    DB_PREFIX . 'tags', [DB_PREFIX . 'tags.id' => DB_PREFIX . 'tag_items.tag_id']
                 );
                 $sql->select()->where('content_id = :content_id');
-                $c2t = Table\ContentToTags::execute($sql, ['content_id' => $contentId]);
+                $c2t = Table\TagItems::execute($sql, ['content_id' => $contentId]);
                 if ($c2t->hasRows()) {
                     foreach ($c2t->rows() as $c) {
                         $tags[] = $c->title;
@@ -198,7 +198,7 @@ class Tag
             $contentId = $controller->view()->id;
 
             if (null !== $contentId) {
-                $c2t = new Table\ContentToTags();
+                $c2t = new Table\TagItems();
                 $c2t->delete(['content_id' => $contentId]);
             }
 
@@ -214,7 +214,7 @@ class Tag
                         ]);
                         $t->save();
                     }
-                    $c2t = new Table\ContentToTags([
+                    $c2t = new Table\TagItems([
                         'content_id' => $contentId,
                         'tag_id'     => $t->id
                     ]);
@@ -235,7 +235,7 @@ class Tag
     {
         if (($_POST) && isset($_POST['process_content']) && isset($_POST['content_process_action']) && ($_POST['content_process_action'] == -3)) {
             foreach ($_POST['process_content'] as $id) {
-                $c2t = new Table\ContentToTags();
+                $c2t = new Table\TagItems();
                 $c2t->delete(['content_id' => (int)$id]);
             }
         }

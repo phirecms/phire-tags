@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS `[{prefix}]tags` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table "content_to_tags"
+-- Table structure for table "tag_items"
 --
 
-CREATE TABLE IF NOT EXISTS `[{prefix}]content_to_tags` (
+CREATE TABLE IF NOT EXISTS `[{prefix}]tag_items` (
   `content_id` int(16) NOT NULL,
   `tag_id` int(16) NOT NULL,
   INDEX `tag_content_id` (`content_id`),
