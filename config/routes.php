@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-tags routes
+ */
 return [
     '/tag/*' => [
         'controller' => 'Phire\Tags\Controller\IndexController',

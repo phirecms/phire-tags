@@ -1,11 +1,32 @@
 <?php
+/**
+ * Phire Tags Module
+ *
+ * @link       https://github.com/phirecms/phire-tags
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Tags\Form;
 
 use Pop\Form\Form;
 use Pop\Validator;
 use Phire\Tags\Table;
 
+/**
+ * Tag Form class
+ *
+ * @category   Phire\Tags
+ * @package    Phire\Tags
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class Tag extends Form
 {
 

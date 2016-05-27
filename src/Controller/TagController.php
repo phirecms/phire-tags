@@ -1,5 +1,16 @@
 <?php
+/**
+ * Phire Tags Module
+ *
+ * @link       https://github.com/phirecms/phire-tags
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ */
 
+/**
+ * @namespace
+ */
 namespace Phire\Tags\Controller;
 
 use Phire\Tags\Model;
@@ -8,6 +19,16 @@ use Phire\Tags\Table;
 use Phire\Controller\AbstractController;
 use Pop\Paginator\Paginator;
 
+/**
+ * Tag Controller class
+ *
+ * @category   Phire\Tags
+ * @package    Phire\Tags
+ * @author     Nick Sagona, III <dev@nolainteractive.com>
+ * @copyright  Copyright (c) 2009-2016 NOLA Interactive, LLC. (http://www.nolainteractive.com)
+ * @license    http://www.phirecms.org/license     New BSD License
+ * @version    1.0.0
+ */
 class TagController extends AbstractController
 {
 

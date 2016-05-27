@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * phire-tags form configuration
+ */
 return [
     'Phire\Tags\Form\Tag' => [
         [
