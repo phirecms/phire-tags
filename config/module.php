@@ -3,7 +3,7 @@
  * Module Name: phire-tags
  * Author: Nick Sagona
  * Description: This is the tags module for Phire CMS 2, to be used in conjunction with the Content and Media modules
- * Version: 1.0
+ * Version: 1.1
  */
 return [
     'phire-tags' => [
