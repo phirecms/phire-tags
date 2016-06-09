@@ -23,7 +23,7 @@ namespace Phire\Tags;
  * @license    http://www.phirecms.org/license     New BSD License
  * @version    1.0.1
  */
-class Tag extends \Phire\BaseUpdater
+class Updater extends \Phire\BaseUpdater
 {
 
     public function update1()
