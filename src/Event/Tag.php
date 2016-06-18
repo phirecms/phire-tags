@@ -177,7 +177,7 @@ class Tag
      */
     public static function getAll(AbstractController $controller, Application $application)
     {
-        if ((!$_POST) && ($controller->hasView()) && (null !== $controller->view()->form) &&
+        if ((!$_POST) && ($controller->hasView()) && (null !== $controller->view()->form) && ($controller->view()->form !== false) &&
             ((int)$controller->view()->form->id != 0) && (null !== $controller->view()->form) &&
             ($controller->view()->form instanceof \Phire\Content\Form\Content)) {
             $contentId  = $controller->view()->form->id;
@@ -214,7 +214,7 @@ class Tag
         $contentId = null;
 
         if (($_POST) && ($controller->hasView()) && (null !== $controller->view()->id) &&
-            (null !== $controller->view()->form) && ($controller->view()->form instanceof \Pop\Form\Form)) {
+            (null !== $controller->view()->form) && ($controller->view()->form !== false) && ($controller->view()->form instanceof \Pop\Form\Form)) {
             $tags      = $controller->view()->form->content_tags;
             $contentId = $controller->view()->id;
 
